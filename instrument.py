@@ -1,5 +1,5 @@
 # IMPORTANT: You need to install the playSound module with "pip3 install playsound" (On Linux terminal) for this to work.
-# To use example: Run "playingSound.py"
+# To use example: Run "playingSoundTest.py" or "hotCrossBuns.py"
 
 from playsound import playsound
 import numpy as np
