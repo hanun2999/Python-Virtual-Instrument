@@ -1,6 +1,5 @@
 # IMPORTANT: You need to install the playSound module with "pip3 install playsound" (On Linux terminal) for this to work.
-# To use: run in shell with "python3 playingSound.py".
-# Commands are: "up" to move up a chord, "actionwn" to move down a chord, "play" to play the sound and "exit" to exit.
+# To use example: run in shell with "python3 playingSound.py".
 
 from playsound import playsound
 import numpy as np
