@@ -107,12 +107,20 @@ class instrument():
         sampling_rate = 44100
         samples = 44100*time
         x = np.arange(samples)
-        file_name = f"sinewave_{freq}_{time}.wav"
+        data = None
+        scaled = None 
 
-        data = np.sin(2 * np.pi * freq * x / sampling_rate)
-        scaled = np.int16(data/np.max(np.abs(data)) * 32767)
+        if freq == 0:
+            file_name = f"silence_{freq}_{time}.wav"
+            data = np.random.uniform(0, 0, samples)
+            scaled = data
+        else:
+            file_name = f"sinewave_{freq}_{time}.wav"
+            data = np.sin(2 * np.pi * freq * x / sampling_rate)
+            scaled = np.int16(data/np.max(np.abs(data)) * 32767)
+             
         write(file_name, sampling_rate, scaled)
-        
+            
         if play == True:
             playsound(file_name)
 
