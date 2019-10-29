@@ -71,6 +71,7 @@ class instrument():
 
             self.__gen_list_instrument()
     
+
     # Private function to generate a chord list for the instrument.
     def __gen_list_instrument(self):
         with open(self.mp3_sounds_filename, "r") as f:
