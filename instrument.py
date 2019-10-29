@@ -1,9 +1,14 @@
 # IMPORTANT: You need to install the playSound module with "pip3 install playsound" (On Linux terminal) for this to work.
 # To use example: Run "playingSoundTest.py" or "hotCrossBuns.py"
 
-from playsound import playsound
 import numpy as np
+import os
+import errno
+# import simpleaudio as sa
+# from pydub import AudioSegment
+# from pydub.playback import play
 from scipy.io.wavfile import write
+from playsound import playsound
 
 class instrument():
     """
@@ -36,7 +41,7 @@ class instrument():
         gen_sound(freq, time, play):
             Generates a mono-frequence sound. Parameters are "freq" which is the frequency, "time" which is the amount of
             time (in seconds) the sound is played for, and "play" which will play the sound immediately after generation
-            if set to True.
+            if set to True. This function will generate a directory named "sound_files" if it does not already exist.
 
         queue_sound(freq, time):
             Adds a sound to the sound queue. Parameters are "freq" which is the frequency and "time" which is the amount
@@ -108,17 +113,30 @@ class instrument():
         samples = 44100*time
         x = np.arange(samples)
         data = None
-        scaled = None 
+        scaled = None
+        dir_path = None
 
         if freq == 0:
-            file_name = f"silence_{freq}_{time}.wav"
-            data = np.random.uniform(0, 0, samples)
+            file_name = f"./sound_files/silence_{freq}_{time}.wav"
+            data = np.random.uniform(0, 0, int(samples))
             scaled = data
         else:
-            file_name = f"sinewave_{freq}_{time}.wav"
+            file_name = f"./sound_files/sinewave_{freq}_{time}.wav"
             data = np.sin(2 * np.pi * freq * x / sampling_rate)
             scaled = np.int16(data/np.max(np.abs(data)) * 32767)
-             
+
+        dir_path = os.path.dirname(file_name)
+        
+        # Create directory if it does not already exist.
+        if not os.path.exists(dir_path):
+            try:
+                os.makedirs(dir_path)
+            except OSError as e:
+                # Do not raise an error if the file already exists. Only raise if some other kind of error.
+                # This stops race conditions.
+                if e.errno != errno.EEXISTS:
+                    raise 
+
         write(file_name, sampling_rate, scaled)
             
         if play == True:
@@ -128,7 +146,7 @@ class instrument():
 
 
     # Generates the sounds and adds them to a queue.
-    def queue_sound(self, freq, time):
+    def queue_sound(self, freq, time = 1):
         self.sound_queue.append(self.gen_sound(freq, time))
     
 
